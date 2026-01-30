@@ -10,17 +10,11 @@ from logic import (
     mock_ai_response
 )
 
-# --------------------------------------------------
-# Page config
-# --------------------------------------------------
 st.set_page_config(
     page_title="Contract Risk Assessment Bot",
     layout="wide"
 )
 
-# --------------------------------------------------
-# Soft CSS polish (SAFE, professional)
-# --------------------------------------------------
 st.markdown(
     """
     <style>
@@ -45,18 +39,14 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --------------------------------------------------
-# Title & description
-# --------------------------------------------------
+
 st.title("📄 Contract Analysis & Risk Assessment Bot")
 st.write(
     "A GenAI-powered assistant for Indian SMEs to analyze contracts, "
     "identify legal risks, and get simple business-friendly explanations."
 )
 
-# --------------------------------------------------
-# File reading helpers
-# --------------------------------------------------
+
 def read_txt(file):
     return file.read().decode("utf-8")
 
@@ -74,9 +64,7 @@ def read_docx(file):
     return "\n".join([p.text for p in document.paragraphs])
 
 
-# --------------------------------------------------
-# File upload
-# --------------------------------------------------
+
 uploaded_file = st.file_uploader(
     "Upload contract file (PDF, DOCX, or TXT)",
     type=["pdf", "docx", "txt"]
@@ -94,9 +82,7 @@ if uploaded_file is not None:
     ):
         contract_text = read_docx(uploaded_file)
 
-# --------------------------------------------------
-# Text area
-# --------------------------------------------------
+
 contract_text = st.text_area(
     "Contract Text",
     value=contract_text,
@@ -104,21 +90,19 @@ contract_text = st.text_area(
     placeholder="Paste contract text here if not uploading a file..."
 )
 
-# --------------------------------------------------
-# Analyze button with animation
-# --------------------------------------------------
+
 if st.button("🔍 Analyze Contract"):
     if contract_text.strip() == "":
         st.warning("Please upload a file or paste contract text.")
     else:
-        # Spinner + progress animation
+       
         with st.spinner("Analyzing contract clauses and risks..."):
             progress = st.progress(0)
             for i in range(5):
                 time.sleep(0.25)
                 progress.progress((i + 1) * 20)
 
-            # Clause extraction
+           
             raw_lines = contract_text.split("\n")
             clauses = [c.strip() for c in raw_lines if len(c.strip()) > 30]
 
@@ -139,13 +123,10 @@ if st.button("🔍 Analyze Contract"):
 
             overall = overall_contract_risk(results)
 
-        # Toast notification
+        
         st.toast("✅ Contract analysis completed!", icon="📄")
 
-        # --------------------------------------------------
-        # Summary section (animated feel)
-        # --------------------------------------------------
-        st.markdown("---")
+      
         st.subheader(f"📊 Overall Contract Risk: **{overall}**")
         st.write(final_advice(overall))
 
@@ -164,9 +145,7 @@ if st.button("🔍 Analyze Contract"):
         if overall == "Low":
             st.balloons()
 
-        # --------------------------------------------------
-        # Clause-by-clause analysis
-        # --------------------------------------------------
+        
         st.markdown("---")
         st.subheader("📌 Clause-by-Clause Analysis")
 
@@ -189,3 +168,4 @@ if st.button("🔍 Analyze Contract"):
 
                 st.write("**Suggested Safer Alternative:**")
                 st.write(r["ai_suggestion"])
+
